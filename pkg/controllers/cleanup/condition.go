@@ -1,4 +1,4 @@
-package conditions
+package cleanup
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/kyverno/kyverno/pkg/engine/variables/operator"
 )
 
-func CheckAnyAllConditions(logger logr.Logger, ctx enginecontext.Interface, condition kyvernov2beta1.AnyAllConditions) (bool, error) {
+func checkAnyAllConditions(logger logr.Logger, ctx enginecontext.Interface, condition kyvernov2beta1.AnyAllConditions) (bool, error) {
 	for _, condition := range condition.AllConditions {
 		if passed, err := checkCondition(logger, ctx, condition); err != nil {
 			return false, err
