@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   prepare-images:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -42,7 +42,7 @@ jobs:
           if-no-files-found: error
 
   prepare-cli:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -70,7 +70,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   standard:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -158,7 +158,7 @@ jobs:
         uses: ./.github/actions/kyverno-logs
 
   chainsaw:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -252,7 +252,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   ttl:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -324,7 +324,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   force-failure-policy-ignore:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -397,7 +397,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   validating-admission-policies-v1alpha1:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -455,7 +455,7 @@ jobs:
   
   # runs conformance test suites with configuration:
   validating-admission-policies-v1beta1:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -513,7 +513,7 @@ jobs:
   
   # runs conformance test suites with configuration:
   validating-admission-policy-reports-v1alpha1:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -573,7 +573,7 @@ jobs:
   
   # runs conformance test suites with configuration:
   validating-admission-policy-reports-v1beta1:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -631,7 +631,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   custom-sigstore:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -722,7 +722,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   default:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     strategy:
@@ -793,7 +793,7 @@ jobs:
 
   # runs conformance test suites with configuration:
   policy-library:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -907,7 +907,7 @@ jobs:
         uses: ./.github/actions/kyverno-logs
 
   monitor-helm-secret-size:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     needs: prepare-images
@@ -958,7 +958,7 @@ jobs:
           fi
 
   check-tests:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       packages: read
     needs: prepare-cli
@@ -995,6 +995,6 @@ jobs:
     - default
     - monitor-helm-secret-size
     - check-tests
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - run: echo "Required jobs success!"
