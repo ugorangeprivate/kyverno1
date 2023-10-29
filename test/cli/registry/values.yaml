@@ -1,6 +1,0 @@
-policies:
-- name: check-image-base
-  rules:
-    - name: check-image-base-rule
-      foreachValues:
-        mobysource: ["1"]
