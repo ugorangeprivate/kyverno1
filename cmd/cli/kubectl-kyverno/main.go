@@ -2,55 +2,38 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
-	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/apply"
-	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/jp"
-	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/test"
-	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/version"
+	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/commands"
+	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/experimental"
+	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/log"
 	"github.com/spf13/cobra"
-	"k8s.io/klog/v2"
-	"k8s.io/klog/v2/klogr"
-	log "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
-// CLI ...
 func main() {
-	cli := &cobra.Command{
-		Use:   "kyverno",
-		Short: "Kubernetes Native Policy Management",
+	cmd, err := setup()
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
 	}
-
-	configurelog(cli)
-
-	commands := []*cobra.Command{
-		version.Command(),
-		apply.Command(),
-		test.Command(),
-		jp.Command(),
-	}
-
-	cli.AddCommand(commands...)
-
-	if err := cli.Execute(); err != nil {
+	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
 
-func configurelog(cli *cobra.Command) {
-	// clear flags initialized in static dependencies
-	if flag.CommandLine.Lookup("log_dir") != nil {
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+func setup() (*cobra.Command, error) {
+	cmd := commands.RootCommand(experimental.IsEnabled())
+	if err := configureLogs(cmd); err != nil {
+		return nil, fmt.Errorf("Failed to setup logging (%w)", err)
 	}
+	return cmd, nil
+}
 
-	klog.InitFlags(nil)
+func configureLogs(cli *cobra.Command) error {
+	if err := log.Configure(); err != nil {
+		return err
+	}
 	cli.PersistentFlags().AddGoFlagSet(flag.CommandLine)
-	log.SetLogger(klogr.New())
-
-	_ = cli.PersistentFlags().MarkHidden("alsologtostderr")
-	_ = cli.PersistentFlags().MarkHidden("logtostderr")
-	_ = cli.PersistentFlags().MarkHidden("log_dir")
-	_ = cli.PersistentFlags().MarkHidden("log_backtrace_at")
-	_ = cli.PersistentFlags().MarkHidden("stderrthreshold")
-	_ = cli.PersistentFlags().MarkHidden("vmodule")
+	return nil
 }
